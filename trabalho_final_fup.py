@@ -2,7 +2,7 @@
 
 # <--- função para criação de matriz --->
 
-def começo(m):
+def preeench_matriz(m):
     matriz = [m*[0], m*[0], m*[0], m*[0]]
 
     for i in range(0, m):
@@ -14,7 +14,7 @@ def começo(m):
 
 # <--- Escrita dos arquivos - paralelo à criação da função --->
 
-def abrir_arq(x):
+'''def abrir_arq(a):
     arquivo = open("Tamanho_peças", "a")
 
     for i in range(qtd_peças):
@@ -23,11 +23,25 @@ def abrir_arq(x):
 
         arquivo.write(tam)
 
+    arquivo.close()'''
+
+# <--- criação de arquivos generalizada --->
+
+
+def arq_abrir(identificador, quantidade, nome_arq):
+    arquivo = open(nome_arq, "a")
+
+    for i in range(quantidade):
+        tamanho = input(f"Qual o/a {identificador} ?")
+        tam = (f" Item de {identificador} [{i+1}]: {tamanho}\n")
+
+        arquivo.write(tam)
+
     arquivo.close()
 
 
-qtd_peças = int(input("Quantas peças vão ser adicionadas? "))
-arq = abrir_arq(qtd_peças)
+'''qtd_peças = int(input("Quantas peças vão ser adicionadas? "))
+arq = abrir_arq(qtd_peças)'''
 
 # <----- Leitura dos dados inseridos no arquivo ----->
 
@@ -40,11 +54,11 @@ arquivo.close()
 
 # <--- Criação de listas a partir do arquivo --->
 
-arquivo = open("Tamanho_peças", "r")
+'''arquivo = open("Tamanho_peças", "r")
 
 tamanhos = arquivo.readlines()
 
-print(tamanhos)
+print(tamanhos)'''
 
 
 # <--- função de remoção de linhas --->
@@ -60,6 +74,7 @@ def remov_linha(num_linhas, nome_arq):
 
     arquivo = open(nome_arq, "w")
     arquivo.writelines(linhas)
+
 # <--- função de alteração das linhas --->
 
 
@@ -76,6 +91,12 @@ def alterar_linhas(num_linhas, novo, nome_arq):
 
     arquivo = open(nome_arq, "w")
     arquivo.writelines(linhas)
+
+# <--- adição dos elementos em um arquivo --->
+
+
+tipagem = input("Qual o tipo da peça? ")
+teste = arq_abrir(tipagem, 2, "Tipo_peça")
 
 # <<<<<<<<<<<<<<<<<<<<<<< Bruno >>>>>>>>>>>>>>>>>>>>>>>>>>>
 

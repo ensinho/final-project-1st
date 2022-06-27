@@ -60,8 +60,22 @@ def remov_linha(num_linhas, nome_arq):
 
     arquivo = open(nome_arq, "w")
     arquivo.writelines(linhas)
+# <--- função de alteração das linhas --->
 
 
+def alterar_linhas(num_linhas, novo, nome_arq):
+    arquivo = open(nome_arq, "r")
+
+    linhas = arquivo.readlines()
+
+    arquivo.close()
+
+    linhas.insert(num_linhas-1, novo)
+
+    del(linhas[num_linhas-1])
+
+    arquivo = open(nome_arq, "w")
+    arquivo.writelines(linhas)
 
 # <<<<<<<<<<<<<<<<<<<<<<< Bruno >>>>>>>>>>>>>>>>>>>>>>>>>>>
 

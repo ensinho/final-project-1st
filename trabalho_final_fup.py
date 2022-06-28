@@ -1,4 +1,4 @@
-# <<<<<<<<<<<<<<<<<<<<<<< Enzo >>>>>>>>>>>>>>>>>>>>>>>>>>>
+ <<<<<<<<<<<<<<<<<<<<<<< Enzo >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # <--- função para criação de matriz --->
 
@@ -14,38 +14,45 @@ def preeench_matriz(m):
 
 # <--- Escrita dos arquivos - paralelo à criação da função --->
 
-'''def abrir_arq(a):
-    arquivo = open("Tamanho_peças", "a")
+# def abrir_arq(a):
+    # arquivo = open("Tamanho_peças", "a")
 
-    for i in range(qtd_peças):
-        tamanho = input("Qual o tamanho da peça? ")
-        tam = (f" Tamanho da peça [{i+1}]: {tamanho}\n")
+    # for i in range(qtd_peças):
+    # tamanho = input("Qual o tamanho da peça? ")
+    # tam = (f" Tamanho da peça [{i+1}]: {tamanho}\n")
 
-        arquivo.write(tam)
+    # arquivo.write(tam)
 
-    arquivo.close()'''
+    # arquivo.close()
 
 # <--- criação de arquivos generalizada --->
 
 
-def arq_abrir(identificador, quantidade, nome_arq):
+def arq_abrir(id, quantidade, nome_arq):
     arquivo = open(nome_arq, "a")
-
     for i in range(quantidade):
-        tamanho = input(f"Qual o/a {identificador} ?")
-        tam = (f" Item de {identificador} [{i+1}]: {tamanho}\n")
-
-        arquivo.write(tam)
+        tipo = input(f"Qual o tipo do item [{id}] ? ")
+        sexo = input("Qual o gênero deste item? ")
+        tamanho = input("Qual o tamanho do item?")
+        color = input("Qual a cor ?")
+        date = int(input(("Qual a data de compra deste item? ")))
+        stats = input("Qual o status desse item? [Venda] [Doação] [Manter] ")
+        if stats == "Venda":
+            price = int(input("Qual o preço deste item?"))
+        else:
+            continue
+        arquivo.write(
+            f"Item || id: [{tag}] - tipo: [{tipo}] - sexo: [{sexo}] - tamanho: [{tamanho}] - cor: [{color}] - data de aquisição: [{date}] - status: [{stats}] - preço: [{price}] ")
 
     arquivo.close()
 
 
-'''qtd_peças = int(input("Quantas peças vão ser adicionadas? "))
-arq = abrir_arq(qtd_peças)'''
+# qtd_peças = int(input("Quantas peças vão ser adicionadas? "))
+# arq = abrir_arq(qtd_peças)'''
 
 # <----- Leitura dos dados inseridos no arquivo ----->
 
-arquivo = open("Tamanho_peças", "r")
+arquivo = open("Roupas", "r")
 
 conteudo = arquivo.read()
 print(conteudo)
@@ -54,11 +61,11 @@ arquivo.close()
 
 # <--- Criação de listas a partir do arquivo --->
 
-'''arquivo = open("Tamanho_peças", "r")
+# arquivo = open("Tamanho_peças", "r")
 
-tamanhos = arquivo.readlines()
+# tamanhos = arquivo.readlines()
 
-print(tamanhos)'''
+# print(tamanhos)
 
 
 # <--- função de remoção de linhas --->
@@ -95,8 +102,10 @@ def alterar_linhas(num_linhas, novo, nome_arq):
 # <--- adição dos elementos em um arquivo --->
 
 
-tipagem = input("Qual o tipo da peça? ")
-teste = arq_abrir(tipagem, 2, "Tipo_peça")
+tag = input("Qual o ID do item à ser adicionado? ")
+quantidade = int(input("Quantos itens serão adicionados? "))
+local = input("Onde deseja adicionar? ")
+teste = arq_abrir(tag, quantidade, local)
 
 # <<<<<<<<<<<<<<<<<<<<<<< Bruno >>>>>>>>>>>>>>>>>>>>>>>>>>>
 

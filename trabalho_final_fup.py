@@ -1,8 +1,12 @@
 # <<<<<<<<<<<<<<<<<<<<<<< Enzo >>>>>>>>>>>>>>>>>>>>>>>>>>>
+import sys
+import os
+
 
 def restart_program():
     python = sys.executable
     os.execl(python, python, * sys.argv)
+
 # <--- função para criação de matriz --->
 
 
@@ -48,7 +52,7 @@ def arq_abrir(quantidade):
         else:
             price = int(input("Qual o preço deste item?"))
         arquivo.write(
-            f"Item || id: [{tag}] - tipo: [{tipo}] - sexo: [{sexo}] - tamanho: [{tamanho}] - cor: [{color}] - data de aquisição: [{date}] - status: [{stats}] - preço: [{price}] - estilo: [{estilo}] ")
+            f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | preço:[{price}]| estilo:[{estilo}]")
 
     arquivo.close()
 
@@ -90,9 +94,9 @@ def alterar_linhas(num_linhas, novo):
 
     arquivo.close()
 
-    linhas.insert(num_linhas-1, novo)
+    linhas.insert((num_linhas-1), novo)
 
-    del(linhas[num_linhas-1])
+    del(linhas[num_linhas - 1])
 
     arquivo = open("Armario", "w")
     arquivo.writelines(linhas)
@@ -127,9 +131,11 @@ if iniciar == "Visualizar":
         restart_program()
 
 # agumas funçoes, como essa ainda nao estao funcionando devidamente
+# função alterar nao esta alterando, apenas adicionando uma nova peça
+
 if iniciar == "Alterar":
     item = int(input("Qual linha você deseja alterar? "))
-    novo = arq_abrir(item)
+    novo = arq_abrir(1)
     alteraçao = alterar_linhas(item, novo)
 if iniciar == "Remover":
     onde = int(input("QUal linha você deseja remover? "))

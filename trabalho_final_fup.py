@@ -1,44 +1,43 @@
 # <<<<<<<<<<<<<<<<<<<<<<< Enzo >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-#função para reniciar o programa
+# função para reniciar o programa
 import sys
 import os
 
+
 def restart_program():
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
 
-# <--- função para criação de matriz --->
-
-def criar_matriz(n, m):
-    m1 = []
-    for i in range(n):
-        linha = []
-        for j in range(m):
-            linha.append(
-                int(input(f"DIgite o elemento[{i}][{j}] da mat{n}x{m} ")))
-        m1.append(linha)
-    return m1
+    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
 
 # <--- função principal, de adicionar peças --->
 
 
 def arq_abrir(quantidade):
-    tag = 1
-    
+
     arquivo = open("Armario", "a", encoding="utf-8")
 
-    for i in range(quantidade): 
+    for i in range(quantidade):
+        ler_ids = open("Ids", "r")
 
-        #tag = int(input("Qual o ID do item? "))
+        id = ler_ids.read()
+        print(id)
+
+        ler_ids.close()
+
+        tag = int(input("Qual o ID do item? "))
+
+        ids = open("Ids", "a", encoding="utf-8")
+        ids.write(f"Id: [{tag}] ")
+        ids.close()
 
         tipo = input(f"Qual o tipo do item [{tag}] ? ")
 
-        sexo = input("Qual o gênero deste item? ")
+        sexo = input("Qual o gênero deste item ?  ")
 
         tamanho = input("Qual o tamanho do item?")
         while tamanho != "p" and tamanho != "m" and tamanho != "g":
             tamanho = input("Qual o tamanho do item?")
+
         color = input("Qual a cor ?")
 
         estilo = input("Qual o estilo da peça? ")
@@ -51,12 +50,11 @@ def arq_abrir(quantidade):
         else:
             price = int(input("Qual o preço deste item?"))
 
-        tag += 1
-
         arquivo.write(
-            f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | preço:[{price}]| estilo:[{estilo}]\n")
+            f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | valor:[{price}] | estilo:[{estilo}]\n")
 
     arquivo.close()
+
 
 # <--- função de remoção de linhas --->
 
@@ -81,7 +79,7 @@ def alterar_linhas(num_linhas, novo):
     linhas = arquivo.readlines()
 
     arquivo.close()
-    
+
     linhas.insert(num_linhas-1, novo)
 
     del(linhas[num_linhas])
@@ -93,14 +91,16 @@ def alterar_linhas(num_linhas, novo):
 
 # <--- adição dos elementos em um arquivo --->
 
-opcoes = [" < ------ Á R M A R I O ------ >"  , "Digite [1] para adicionar novas peças! " ,"Digite [2] para visualizar suas peças. " , "Digite [3] para alterar alguma peça." , "Digite [4] para remover alguma peça. " , "Digite [5] para sair." ]
+
+opcoes = [" < ------- Á R M A R I O ------- >", "Digite [1] para adicionar novas peças! ", "Digite [2] para visualizar suas peças. ",
+          "Digite [3] para alterar alguma peça.", "Digite [4] para remover alguma peça. ", "Digite [5] para sair."]
 
 for o in range(6):
     print(opcoes[o])
 
 
 while True:
-    iniciar = int(input("Qual ação irá ser tomada? "))
+    iniciar = int(input("Qual ação ira ser tomada? "))
 
     if iniciar > 5 or iniciar < 1:
         print("Entrada inválida! Tente novamente com outro número. ")
@@ -123,9 +123,10 @@ if iniciar == 1:
             teste1 = arq_abrir(1)
         elif continuar == "nao":
             fechar = input("Dseja fechar o programa? ")
-            if fechar == "sim":
-                break
-            exit()
+            if fechar == "nao":
+                restart_program()
+            else:
+                exit()
 
 if iniciar == 2:
     # <----- Leitura dos dados inseridos no arquivo ----->
@@ -172,7 +173,7 @@ if iniciar == 4:
     if remov_novo == "sim":
         onde1 = int(input("Qual linha você deseja remover? "))
         remoçao1 = remov_linha(onde1)
-    else: 
+    else:
         fim = input("Deseja sair do guarda-roupa? ")
         if fim == "sim":
             exit()

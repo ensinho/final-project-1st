@@ -51,9 +51,24 @@ def arq_abrir(quantidade):
         color = input("Qual a cor ?")
         color = color.lower()
 
-        estilo = input("Qual o estilo da peça? ")
-        estilo = estilo.lower()
+        estile = input("Qual o estilo da peça? ")
+        estilo = estile.lower()
         # ler de uma biblioteca de estilos para tratar
+
+        estilos = open("Estilos", "r")
+
+        tipos = estilos.read()
+
+        estilos.close()
+
+        while estile not in tipos:
+            resposta = input("Estilo inexistente! Deseja cadastrar um novo? ")
+            if resposta == "sim":
+                # aqui onde seria adicionado um sistema de cadastro de novo estilo
+                # nao mexi com isso ainda, mexeremos em conjunto depois
+                print("Estilo cadastrado")
+            else:
+                estile = input("Qual o estilo da peça? ")
 
         date = int(input(("Qual a data de compra deste item? ")))
 

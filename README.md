@@ -6,4 +6,4 @@ Além da edição desse.
 Equipe:
 Enzo Esmeraldo ||
 Bruno Aguiar || 
-Julia Takimaki ||
+Julia Takimaki 

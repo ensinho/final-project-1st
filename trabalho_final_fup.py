@@ -1,6 +1,8 @@
 # <<<<<<<<<<<<<<<<<<<<<<< Enzo >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # função para reniciar o programa
+# esta função veio apresentado problemas, pretendo remove-la em breve
+
 import sys
 import os
 
@@ -54,7 +56,7 @@ def arq_abrir(quantidade):
         estile = input("Qual o estilo da peça? ")
         estilo = estile.lower()
         # ler de uma biblioteca de estilos para tratar
-
+        # aqui, uma tentativa de tratar com uma biblioteca externa de estilos
         estilos = open("Estilos", "r")
 
         tipos = estilos.read()
@@ -123,16 +125,18 @@ def alterar_linhas(num_linhas, novo):
     arquivo = open("Armario", "w")
     arquivo.writelines(linhas)
 
-# <--- adição dos elementos em um arquivo --->
+# <---------- programa principal ---------->
 
 
 opcoes = [" < ------- Á R M A R I O ------- >", "Digite [1] para adicionar novas peças! ", "Digite [2] para visualizar suas peças. ",
           "Digite [3] para alterar alguma peça.", "Digite [4] para remover alguma peça. ", "Digite [5] para sair."]
 
+# menu bonitinho
 for o in range(6):
     print(opcoes[o])
 
 
+# garantir a ação certa
 while True:
     iniciar = int(
         input("Utilizando os digitos do menu. Qual ação irá ser tomada?  "))
@@ -143,6 +147,7 @@ while True:
         break
 
 
+# adicionar peças
 if iniciar == 1:
 
     quantidade = int(input("Quantos itens serão adicionados? "))
@@ -163,6 +168,7 @@ if iniciar == 1:
             else:
                 exit()
 
+# visualizar as peças
 if iniciar == 2:
     # <----- Leitura dos dados inseridos no arquivo ----->
 
@@ -180,6 +186,7 @@ if iniciar == 2:
         restart_program()
 
 
+# alterar peças
 if iniciar == 3:
     item = int(input("Qual Cabide você deseja alterar? "))
     novo = arq_abrir(1)
@@ -200,6 +207,7 @@ if iniciar == 3:
         else:
             restart_program()
 
+# remover peças
 if iniciar == 4:
     onde = int(input("Qual Cabide você deseja remover? "))
     remoçao = remov_linha(onde)
@@ -215,6 +223,7 @@ if iniciar == 4:
         else:
             restart_program()
 
+# fechar o programa
 if iniciar == 5:
     exit()
 

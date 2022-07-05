@@ -31,20 +31,20 @@ def arq_abrir(quantidade):
         ids.write(f"Id: [{tag}] ")
         ids.close()
 
-        tipo = input(f"Qual o tipo do item [{tag}] ? ")
-        tipo = tipo.lower()
+        padrao = input(f"Qual o tipo do item [{tag}] ? ")
+        tipo = padrao.lower()
         while tipo != "superior" and tipo != "inferior" and tipo != "calçado":
             print("Deve ser algum superior, inferior ou calçado! ")
             tipo = input(f"Qual o tipo do item [{tag}] ? ")
 
-        sexo = input("Qual o gênero deste item ?  ")
-        sexo = sexo.lower()
+        genero = input("Qual o gênero deste item ?  ")
+        sexo = genero.lower()
         while sexo != "masculino" and sexo != "feminino" and sexo != "unissex":
             print("Entrada de gênero inválida! ")
             sexo = input("Qual o gênero deste item ?  ")
 
-        tamanho = input("Qual o tamanho do item?")
-        tamanho = tamanho.lower()
+        tam = input("Qual o tamanho do item?")
+        tamanho = tam.lower()
         while tamanho != "p" and tamanho != "m" and tamanho != "g":
             tamanho = input("Qual o tamanho do item?")
 
@@ -57,8 +57,8 @@ def arq_abrir(quantidade):
 
         date = int(input(("Qual a data de compra deste item? ")))
 
-        stats = input("Qual o status desse item? [Venda] [Doação] [Manter] ")
-        stats = stats.lower()
+        status = input("Qual o status desse item? [Venda] [Doação] [Manter] ")
+        stats = status.lower()
 
         # tratamento do status
         if stats == "manter":

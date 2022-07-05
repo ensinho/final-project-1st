@@ -17,6 +17,7 @@ def arq_abrir(quantidade):
     arquivo = open("Armario", "a", encoding="utf-8")
 
     for i in range(quantidade):
+
         ler_ids = open("Ids", "r")
 
         id = ler_ids.read()
@@ -31,24 +32,42 @@ def arq_abrir(quantidade):
         ids.close()
 
         tipo = input(f"Qual o tipo do item [{tag}] ? ")
+        tipo = tipo.lower()
+        while tipo != "superior" and tipo != "inferior" and tipo != "calçado":
+            print("Deve ser algum superior, inferior ou calçado! ")
+            tipo = input(f"Qual o tipo do item [{tag}] ? ")
 
         sexo = input("Qual o gênero deste item ?  ")
+        sexo = sexo.lower()
+        while sexo != "masculino" and sexo != "feminino" and sexo != "unissex":
+            print("Entrada de gênero inválida! ")
+            sexo = input("Qual o gênero deste item ?  ")
 
         tamanho = input("Qual o tamanho do item?")
+        tamanho = tamanho.lower()
         while tamanho != "p" and tamanho != "m" and tamanho != "g":
             tamanho = input("Qual o tamanho do item?")
 
         color = input("Qual a cor ?")
+        color = color.lower()
 
         estilo = input("Qual o estilo da peça? ")
+        estilo = estilo.lower()
+        # ler de uma biblioteca de estilos para tratar
 
         date = int(input(("Qual a data de compra deste item? ")))
 
         stats = input("Qual o status desse item? [Venda] [Doação] [Manter] ")
-        if stats != "Venda":
+        stats = stats.lower()
+
+        # tratamento do status
+        if stats == "manter":
             price = 0
-        else:
+        elif stats == "venda":
             price = int(input("Qual o preço deste item?"))
+        else:
+            price = "DOACAO"
+            # aqui onde conferimos sobre as doaçoes da menina julia
 
         arquivo.write(
             f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | valor:[{price}] | estilo:[{estilo}]\n")
@@ -100,7 +119,8 @@ for o in range(6):
 
 
 while True:
-    iniciar = int(input("Qual ação ira ser tomada? "))
+    iniciar = int(
+        input("Utilizando os digitos do menu. Qual ação irá ser tomada?  "))
 
     if iniciar > 5 or iniciar < 1:
         print("Entrada inválida! Tente novamente com outro número. ")
@@ -146,7 +166,7 @@ if iniciar == 2:
 
 
 if iniciar == 3:
-    item = int(input("Qual linha você deseja alterar? "))
+    item = int(input("Qual Cabide você deseja alterar? "))
     novo = arq_abrir(1)
 
     alteraçao = alterar_linhas(item, novo)
@@ -154,7 +174,7 @@ if iniciar == 3:
     alt_novo = input("Deseja alterar alguma outra peça? ")
 
     if alt_novo == "sim":
-        item1 = int(input("Qual linha você deseja alterar? "))
+        item1 = int(input("Qual Cabide você deseja alterar? "))
         novo1 = arq_abrir(1)
         alteraçao1 = alterar_linhas(item1, novo1)
 
@@ -166,12 +186,12 @@ if iniciar == 3:
             restart_program()
 
 if iniciar == 4:
-    onde = int(input("Qual linha você deseja remover? "))
+    onde = int(input("Qual Cabide você deseja remover? "))
     remoçao = remov_linha(onde)
 
-    remov_novo = input("Deseja remover outra linha? ")
+    remov_novo = input("Deseja remover outro cabide ? ")
     if remov_novo == "sim":
-        onde1 = int(input("Qual linha você deseja remover? "))
+        onde1 = int(input("Qual Cabide você deseja remover? "))
         remoçao1 = remov_linha(onde1)
     else:
         fim = input("Deseja sair do guarda-roupa? ")

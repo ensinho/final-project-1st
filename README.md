@@ -4,6 +4,6 @@ Ele consiste em um Guarda-Roupas virtual, onde poderá ser selecionado o tamanho
 Além da edição desse.
 
 Equipe:
-Enzo Esmeraldo
-Bruno Aguiar
-Julia Takimaki
+Enzo Esmeraldo ||
+Bruno Aguiar || 
+Julia Takimaki ||

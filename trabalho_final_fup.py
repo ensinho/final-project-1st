@@ -87,7 +87,7 @@ def arq_abrir(quantidade):
             # aqui onde conferimos sobre as doaçoes da menina julia
 
         arquivo.write(
-            f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | valor:[{price}] | estilo:[{estilo}]\n")
+            f"Id:[{tag}] | tipo:[{tipo}] | sexo:[{sexo}] | tamanho:[{tamanho}] | cor:[{color}] | data de compra:[{date}] | status:[{stats}] | valor:[{price}] | estilo:[{estile}]\n")
 
     arquivo.close()
 
@@ -174,8 +174,9 @@ if iniciar == 2:
 
     arquivo = open("Armario", "r")
 
-    conteudo = arquivo.read()
-    print(conteudo)
+    conteudo = arquivo.readlines()
+    for i in range(len(conteudo)):
+        print(conteudo[i])
 
     arquivo.close()
 
@@ -184,7 +185,6 @@ if iniciar == 2:
         exit()
     else:
         restart_program()
-
 
 # alterar peças
 if iniciar == 3:

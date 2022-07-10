@@ -1,10 +1,5 @@
-from ast import Delete, Str
-from atexit import unregister
 import csv
-from os import remove
 import random
-from turtle import color
-from winreg import DeleteKey
 # usamos diferentes listas nos parâmetros para garantir a funcionalidade do programa mesmo com variáveis diferentes dentro do programa principal
 
 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guarda-Roupa Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .nav-link {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #4b5563;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: white;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div id="app" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="flex flex-col sm:flex-row justify-between items-center mb-8 pb-4 border-b border-gray-200">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Guarda-Roupa Virtual</h1>
+                <p class="text-gray-500 mt-1">Gerencie suas peças de roupa de forma fácil e moderna.</p>
+            </div>
+            <button id="add-piece-btn" class="mt-4 sm:mt-0 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold btn-primary">
+                <i class="fas fa-plus"></i> Adicionar Peça
+            </button>
+        </header>
+        <nav class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-lg shadow-sm">
+            <a id="nav-armario" class="nav-link active" onclick="switchView('armario')">Meu Armário</a>
+            <a id="nav-venda" class="nav-link" onclick="switchView('venda')">Para Venda</a>
+            <a id="nav-doacao" class="nav-link" onclick="switchView('doacao')">Para Doação</a>
+        </nav>
+        
+        <main>
+            <div id="view-armario">
+                 <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Todas as Peças</h2>
+                    <span id="total-pecas" class="text-gray-500 font-medium"></span>
+                </div>
+                <div id="wardrobe-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Cards de roupas serão inseridos aqui -->
+                </div>
+            </div>
+
+            <div id="view-venda" class="hidden">
+                <h2 class="text-2xl font-semibold mb-4">Peças para Venda</h2>
+                <div id="sale-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Itens para venda -->
+                </div>
+            </div>
+
+            <div id="view-doacao" class="hidden">
+                <h2 class="text-2xl font-semibold mb-4">Peças para Doação</h2>
+                <div id="donation-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Itens para doação -->
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="piece-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <form id="piece-form">
+                <h3 id="modal-title" class="text-2xl font-bold mb-6">Adicionar Nova Peça</h3>
+                <input type="hidden" id="piece-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                        <select id="tipo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option>SUPERIOR</option>
+                            <option>INFERIOR</option>
+                            <option>CALÇADO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tamanho" class="block text-sm font-medium text-gray-700">Tamanho</label>
+                        <select id="tamanho" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option>P</option>
+                            <option>M</option>
+                            <option>G</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="padrao" class="block text-sm font-medium text-gray-700">Gênero</label>
+                        <select id="padrao" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option>MASCULINO</option>
+                            <option>FEMININO</option>
+                            <option>UNISSEX</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="cor" class="block text-sm font-medium text-gray-700">Cor</label>
+                        <input type="text" id="cor" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="estilo" class="block text-sm font-medium text-gray-700">Estilo</label>
+                        <input type="text" id="estilo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="data-aquisicao" class="block text-sm font-medium text-gray-700">Data de Aquisição</label>
+                        <input type="date" id="data-aquisicao" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="situacao" class="block text-sm font-medium text-gray-700">Situação</label>
+                        <select id="situacao" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option value="MANTER">Manter no armário</option>
+                            <option value="VENDA">Para Venda</option>
+                            <option value="DOAÇÃO">Para Doação</option>
+                        </select>
+                    </div>
+                    <div id="preco-container" class="hidden md:col-span-2">
+                         <label for="preco" class="block text-sm font-medium text-gray-700">Preço (R$)</label>
+                         <input type="number" id="preco" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end gap-3">
+                    <button type="button" id="cancel-btn" class="px-4 py-2 rounded-lg font-semibold btn-secondary">Cancelar</button>
+                    <button type="submit" id="save-btn" class="px-4 py-2 rounded-lg font-semibold btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wardrobeContainer = document.getElementById('wardrobe-container');
+            const saleContainer = document.getElementById('sale-container');
+            const donationContainer = document.getElementById('donation-container');
+            const totalPecasSpan = document.getElementById('total-pecas');
+            const addPieceBtn = document.getElementById('add-piece-btn');
+            const pieceModal = document.getElementById('piece-modal');
+            const pieceForm = document.getElementById('piece-form');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const situacaoSelect = document.getElementById('situacao');
+            const precoContainer = document.getElementById('preco-container');
+
+            // Carrega os dados do localStorage ou usa os dados iniciais do seu CSV.
+            let wardrobe = JSON.parse(localStorage.getItem('wardrobe')) || [
+                { "id": 1, "tipo": "SUPERIOR", "tamanho": "P", "padrao": "MASCULINO", "cor": "PRETO", "situacao": "MANTER", "preco": "R$0", "estilo": "STREET", "dataAquisicao": "2022-10-10" },
+                { "id": 2, "tipo": "INFERIOR", "tamanho": "M", "padrao": "FEMININO", "cor": "AZUL", "situacao": "VENDA", "preco": "R$50", "estilo": "CASUAL", "dataAquisicao": "2023-03-05" },
+                { "id": 3, "tipo": "CALÇADO", "tamanho": "G", "padrao": "UNISSEX", "cor": "BRANCO", "situacao": "DOAÇÃO", "preco": "R$0", "estilo": "ESPORTIVO", "dataAquisicao": "2021-01-12" }
+            ];
+
+            const saveToLocalStorage = () => {
+                localStorage.setItem('wardrobe', JSON.stringify(wardrobe));
+            };
+
+            const renderWardrobe = () => {
+                wardrobeContainer.innerHTML = '';
+                saleContainer.innerHTML = '';
+                donationContainer.innerHTML = '';                
+                const allPieces = wardrobe;
+                const salePieces = wardrobe.filter(p => p.situacao === 'VENDA');
+                const donationPieces = wardrobe.filter(p => p.situacao === 'DOAÇÃO');
+                totalPecasSpan.textContent = `${allPieces.length} peças no total`;
+
+                if (allPieces.length === 0) {
+                     wardrobeContainer.innerHTML = `<p class="col-span-full text-center text-gray-500">Seu armário está vazio. Adicione uma nova peça!</p>`;
+                } else {
+                    allPieces.forEach(piece => wardrobeContainer.appendChild(createPieceCard(piece)));
+                }
+
+                if (salePieces.length === 0) {
+                    saleContainer.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhuma peça para venda no momento.</p>`;
+                } else {
+                    salePieces.forEach(piece => saleContainer.appendChild(createPieceCard(piece)));
+                }
+
+                if (donationPieces.length === 0) {
+                     donationContainer.innerHTML = `<p class="col-span-full text-center text-gray-500">Nenhuma peça para doação no momento.</p>`;
+                } else {
+                    donationPieces.forEach(piece => donationContainer.appendChild(createPieceCard(piece)));
+                }
+            };
+
+            const createPieceCard = (piece) => {
+                const card = document.createElement('div');
+                card.className = 'card p-5 flex flex-col justify-between';
+                
+                const formattedDate = new Date(piece.dataAquisicao + 'T00:00:00').toLocaleDateString('pt-BR');
+
+                let statusColor = 'bg-blue-100 text-blue-800';
+                if (piece.situacao === 'VENDA') statusColor = 'bg-green-100 text-green-800';
+                if (piece.situacao === 'DOAÇÃO') statusColor = 'bg-yellow-100 text-yellow-800';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start">
+                             <h4 class="text-lg font-bold capitalize mb-2">${piece.estilo.toLowerCase()}</h4>
+                              <span class="text-xs font-semibold px-2 py-1 rounded-full ${statusColor}">${piece.situacao}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 capitalize"><strong class="font-medium">${piece.tipo.toLowerCase()}</strong> ${piece.cor.toLowerCase()}</p>
+                        <p class="text-sm text-gray-500">Tamanho: ${piece.tamanho} | Gênero: ${piece.padrao}</p>
+                        ${piece.situacao === 'VENDA' ? `<p class="text-lg font-semibold text-green-600 mt-2">R$ ${parseFloat(piece.preco.replace('R$', '')).toFixed(2)}</p>` : ''}
+                        <p class="text-xs text-gray-400 mt-4">Adquirido em: ${formattedDate}</p>
+                    </div>
+                    <div class="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+                        <button onclick="editPiece(${piece.id})" class="flex-1 text-sm text-center py-2 px-3 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">
+                            <i class="fas fa-pencil-alt mr-1"></i> Editar
+                        </button>
+                        <button onclick="deletePiece(${piece.id})" class="flex-1 text-sm text-center py-2 px-3 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition-colors">
+                            <i class="fas fa-trash-alt mr-1"></i> Remover
+                        </button>
+                    </div>
+                `;
+                return card;
+            };
+            const openModal = (piece = null) => {
+                pieceForm.reset();
+                if (piece) {
+                    document.getElementById('modal-title').textContent = 'Editar Peça';
+                    document.getElementById('piece-id').value = piece.id;
+                    document.getElementById('tipo').value = piece.tipo;
+                    document.getElementById('tamanho').value = piece.tamanho;
+                    document.getElementById('padrao').value = piece.padrao;
+                    document.getElementById('cor').value = piece.cor;
+                    document.getElementById('estilo').value = piece.estilo;
+                    document.getElementById('data-aquisicao').value = piece.dataAquisicao;
+                    document.getElementById('situacao').value = piece.situacao;
+                    if (piece.situacao === 'VENDA') {
+                        precoContainer.classList.remove('hidden');
+                        document.getElementById('preco').value = parseFloat(piece.preco.replace('R$', ''));
+                    } else {
+                        precoContainer.classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('modal-title').textContent = 'Adicionar Nova Peça';
+                    document.getElementById('piece-id').value = '';
+                    precoContainer.classList.add('hidden');
+                }
+                pieceModal.classList.remove('hidden');
+            };
+
+            const closeModal = () => {
+                pieceModal.classList.add('hidden');
+            };
+
+            situacaoSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'VENDA') {
+                    precoContainer.classList.remove('hidden');
+                } else {
+                    precoContainer.classList.add('hidden');
+                }
+            });
+
+            addPieceBtn.addEventListener('click', () => openModal());
+            cancelBtn.addEventListener('click', closeModal);
+
+            pieceForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('piece-id').value;
+                const newPiece = {
+                    id: id ? parseInt(id) : Date.now(), // Usa timestamp como ID único se for novo
+                    tipo: document.getElementById('tipo').value.toUpperCase(),
+                    tamanho: document.getElementById('tamanho').value.toUpperCase(),
+                    padrao: document.getElementById('padrao').value.toUpperCase(),
+                    cor: document.getElementById('cor').value.toUpperCase(),
+                    estilo: document.getElementById('estilo').value.toUpperCase(),
+                    dataAquisicao: document.getElementById('data-aquisicao').value,
+                    situacao: document.getElementById('situacao').value.toUpperCase(),
+                    preco: document.getElementById('situacao').value === 'VENDA' ? `R$${parseFloat(document.getElementById('preco').value).toFixed(2)}` : 'R$0'
+                };
+
+                if (id) { // Editando
+                    const index = wardrobe.findIndex(p => p.id === parseInt(id));
+                    wardrobe[index] = newPiece;
+                } else { // Adicionando
+                    wardrobe.push(newPiece);
+                }
+                
+                saveToLocalStorage();
+                renderWardrobe();
+                closeModal();
+            });
+            
+            window.editPiece = (id) => {
+                const piece = wardrobe.find(p => p.id === id);
+                if (piece) {
+                    openModal(piece);
+                }
+            };
+            
+            window.deletePiece = (id) => {
+                if(confirm('Tem certeza que deseja remover esta peça?')) {
+                    wardrobe = wardrobe.filter(p => p.id !== id);
+                    saveToLocalStorage();
+                    renderWardrobe();
+                }
+            };
+
+            window.switchView = (view) => {
+                document.getElementById('view-armario').classList.add('hidden');
+                document.getElementById('view-venda').classList.add('hidden');
+                document.getElementById('view-doacao').classList.add('hidden');
+                document.getElementById('nav-armario').classList.remove('active');
+                document.getElementById('nav-venda').classList.remove('active');
+                document.getElementById('nav-doacao').classList.remove('active');
+                document.getElementById(`view-${view}`).classList.remove('hidden');
+                document.getElementById(`nav-${view}`).classList.add('active');
+            };
+            renderWardrobe();
+            switchView('armario');
+        });
+    </script>
+</body>
+</html>
